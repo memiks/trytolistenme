@@ -61,7 +61,8 @@ $messages = array(
 	"add" => "Ajouter",
 	"cancel" => "Annuler",
 	"message" => "Message",
-	
+	"send" => "Envoyer",
+
 	// account
 	"verifypassphrase" => "Vérifier la phrase mot de passe",
 	"publickey" => "Clé publique",

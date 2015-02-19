@@ -28,7 +28,7 @@
                 "style" : "width:100%",
                 "rows" : 6
             ) }}
-			<button type="button" class="button button-primary" id="sent">Sent</button>
+			<button type="button" class="button button-primary" id="sent">{{ translate._("send") }}</button>
 			{{ hidden_field("friend_id") }}
 			{{ hidden_field("friend") }}
         </form>

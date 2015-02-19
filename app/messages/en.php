@@ -63,6 +63,7 @@ $messages = array(
 	"add" => "Add",
 	"cancel" => "Cancel",
 	"message" => "Message",
+	"send" => "Send",
 	
 	// account
 	"verifypassphrase" => "Verify passphrase",
