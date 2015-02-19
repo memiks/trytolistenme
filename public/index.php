@@ -24,10 +24,9 @@ try {
 		$config = new Ini("config.ini");
     
         $volt = new Volt($view, $di);
-    
         $volt->setOptions(array(
-            $config->volt->compiledPath,
-            $config->volt->compiledExtension
+            "compiledPath" => $config->volt->compiledPath,
+            "compiledExtension" => $config->volt->compiledExtension
         ));
     
         return $volt;
