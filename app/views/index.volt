@@ -23,6 +23,7 @@
 	        <hr/>
         	<h3><a href="/">{{ translate._("home") }}</a> - <a href="/login">{{ translate._("login") }}</a> - <a href="/chat">{{ translate._("chat") }}</a> - 
         	<a href="/account">{{ translate._("account") }}</a> - <a href="/signup">{{ translate._("signup") }}</a></h3>
+        	<br><a href="https://github.com/memiks/trytolistenme/"><img src="/static/github-icon.png"> Source Github</a>
         </div>
 
 		{# Inject the 'security' service #}
