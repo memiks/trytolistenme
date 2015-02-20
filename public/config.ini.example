@@ -1,0 +1,15 @@
+[database]
+host="localhost"
+username="username"
+password="password"
+dbname="database"
+
+[phalcon]
+controllersDir="../app/controllers/"
+modelsDir="../app/models/"
+viewsDir="../app/views/"
+
+[volt]
+compiledPath="../app/compiled/"
+compiledExtension=".compiled"
+extension=".volt"
