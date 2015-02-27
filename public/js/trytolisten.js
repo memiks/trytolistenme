@@ -185,7 +185,7 @@ var trytolisten = {
 	},
 	getNewChat: function() {
         var friend = $("#friend").val();
-        if(friend && trytolisten.chatid && trytolisten.chatid >= 0) {
+        if(friend) {
 	        var fingerprint = trytolisten.getFingerPrintForUser(friend);
 	        log('fingerprint='+fingerprint);
 	        if(!fingerprint) {
@@ -206,6 +206,7 @@ var trytolisten = {
 			    fingerprint = trytolisten.getFingerPrintForUser(friend);
 	        }
 	        log('fingerprint='+fingerprint);
+	        
 	        if(fingerprint) {
 	            $.ajax({
 	                type:"POST",
@@ -235,8 +236,10 @@ var trytolisten = {
 	        }
         }
     	if(trytolisten.chattimeout) {
+    		log('new chat cleartimeout');
             clearTimeout(trytolisten.chattimeout);
     	}
+		log('new chat settimeout');
     	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
 	},
 	getCurrentChat: function() {
@@ -288,14 +291,14 @@ var trytolisten = {
                 	} else {
                 		trytolisten.chatid=0;
                 	}
+			    	if(trytolisten.chattimeout) {
+			            clearTimeout(trytolisten.chattimeout);
+			    	}
+			    	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
                     return false;
                 }
             });
         }      
-    	if(trytolisten.chattimeout) {
-            clearTimeout(trytolisten.chattimeout);
-    	}
-    	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
 	},
 
 	deleteChat: function(ids,fingerprint) {
@@ -329,10 +332,6 @@ var trytolisten = {
         	$('#friend_id').val($(this).data('fingerprint'));
         	$('#friend').val($(this).text());
         	trytolisten.getCurrentChat();
-        	if(trytolisten.chattimeout) {
-                clearTimeout(trytolisten.chattimeout);
-        	}
-        	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
         });
         
         $("#sent").on('click',function() {
