@@ -10,7 +10,7 @@ function log(message) {
 
 function checkLocalStorage() {
     try {
-	    return 'localStorage' in window && window['localStorage'] !== null;
+	    return 'localStorage' in window && window.localStorage !== null;
 	} catch (e) {
 	    return false;
 	}
@@ -185,61 +185,66 @@ var trytolisten = {
 	},
 	getNewChat: function() {
         var friend = $("#friend").val();
-        var fingerprint = trytolisten.getFingerPrintForUser(friend);
-        log('fingerprint='+fingerprint);
-        if(!fingerprint) {
-        	fingerprint = $("#friend_id").val();
-            log('fingerprint='+fingerprint);
-            $.ajax({
-            	type:"POST",
-		        url:"/friend/getkey",
-				data:{name:friend,
-					fingerprint: fingerprint
-				},
-				success: function(result) {
-					key = JSON.parse(result);
-					trytolisten.importUserKey(key,friend);
-				},
-		        async:false
-		    });
-		    fingerprint = trytolisten.getFingerPrintForUser(friend);
-        }
-        log('fingerprint='+fingerprint);
-        if(fingerprint) {
-            $.ajax({
-                type:"POST",
-                url:"/chat/get",
-                data:{
-                    friend:fingerprint,
-                    min:trytolisten.chatid
-                },
-                success:function(data){
-                	chats =  JSON.parse(data);
-                	if(chats && chats.length > 0) {
-                		ids=[];
-	                	for(var chat in chats) {
-	                		if(eval(chats[chat].id)>trytolisten.chatid) {
-	                		    trytolisten.chatid=chats[chat].id;
-                    		    ids.push(chats[chat].id);
-	                		}
-	                		trytolisten.decrypt(chats[chat].message,trytolisten.appendChat);
+        if(friend) {
+	        var fingerprint = trytolisten.getFingerPrintForUser(friend);
+	        log('fingerprint='+fingerprint);
+	        if(!fingerprint) {
+	        	fingerprint = $("#friend_id").val();
+	            log('fingerprint='+fingerprint);
+	            $.ajax({
+	            	type:"POST",
+			        url:"/friend/getkey",
+					data:{name:friend,
+						fingerprint: fingerprint
+					},
+					success: function(result) {
+						key = JSON.parse(result);
+						trytolisten.importUserKey(key,friend);
+					},
+			        async:false
+			    });
+			    fingerprint = trytolisten.getFingerPrintForUser(friend);
+	        }
+	        log('fingerprint='+fingerprint);
+	        
+	        if(fingerprint) {
+	            $.ajax({
+	                type:"POST",
+	                url:"/chat/get",
+	                data:{
+	                    friend:fingerprint,
+	                    min:trytolisten.chatid
+	                },
+	                success:function(data){
+	                	chats =  JSON.parse(data);
+	                	if(chats && chats.length > 0) {
+	                		ids=[];
+		                	for(var chat in chats) {
+		                		if(parseInt(chats[chat].id)>trytolisten.chatid) {
+		                		    trytolisten.chatid=chats[chat].id;
+	                    		    ids.push(chats[chat].id);
+		                		}
+		                		trytolisten.decrypt(chats[chat].message,trytolisten.appendChat);
+		                	}
+	                    	if(ids && ids.length > 0) {
+	                    		trytolisten.deleteChat(ids,fingerprint);
+	                    	}
 	                	}
-                    	if(ids && ids.length > 0) {
-                    		trytolisten.deleteChat(ids,fingerprint);
-                    	}
-                	}
-                    return false;
-                }
-            });
-        }      
+	                    return false;
+	                }
+	            });
+	        }
+        }
     	if(trytolisten.chattimeout) {
+    		log('new chat cleartimeout');
             clearTimeout(trytolisten.chattimeout);
     	}
+		log('new chat settimeout');
     	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
 	},
 	getCurrentChat: function() {
     	$('#chat').empty();
-    	trytolisten.chatid=0;
+    	trytolisten.chatid=-1;
         var friend = $("#friend").val();
         var fingerprint = trytolisten.getFingerPrintForUser(friend);
         log('fingerprint='+fingerprint);
@@ -274,7 +279,7 @@ var trytolisten = {
                 		ids=[];
                     	$('#message').val("");  
                     	for(var chat in chats) {
-                    		if(eval(chats[chat].id)>trytolisten.chatid) {
+                    		if(parseInt(chats[chat].id)>trytolisten.chatid) {
                     		    trytolisten.chatid=chats[chat].id;
                     		    ids.push(chats[chat].id);
                     		}
@@ -283,15 +288,17 @@ var trytolisten = {
                     	if(ids && ids.length > 0) {
                     		trytolisten.deleteChat(ids,fingerprint);
                     	}
+                	} else {
+                		trytolisten.chatid=0;
                 	}
+			    	if(trytolisten.chattimeout) {
+			            clearTimeout(trytolisten.chattimeout);
+			    	}
+			    	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
                     return false;
                 }
             });
         }      
-    	if(trytolisten.chattimeout) {
-            clearTimeout(trytolisten.chattimeout);
-    	}
-    	trytolisten.chattimeout = setTimeout(trytolisten.getNewChat, 1000);
 	},
 
 	deleteChat: function(ids,fingerprint) {
@@ -325,10 +332,6 @@ var trytolisten = {
         	$('#friend_id').val($(this).data('fingerprint'));
         	$('#friend').val($(this).text());
         	trytolisten.getCurrentChat();
-        	if(trytolisten.chattimeout) {
-                clearTimeout(trytolisten.chattimeout);
-        	}
-//        	trytolisten.chattimeout = setTimeout('trytolisten.getCurrentChat()', 1000);
         });
         
         $("#sent").on('click',function() {

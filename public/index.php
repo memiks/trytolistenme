@@ -54,6 +54,7 @@ try {
 
     //Set the database service
     $di->set('db', function(){
+		$config = new Ini("config.ini");
         return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
             "host" => $config->database->host,
             "username" => $config->database->username,
