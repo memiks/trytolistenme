@@ -1,13 +1,5 @@
 	<div class="center">
 		<div class="row">
-    	    <div class="eleven columns" style="text-align:center;">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/JV_r6d44Tnk?rel=0" frameborder="0" allowfullscreen></iframe>
-            </div>
-    	    <div class="one columns">
-                <iframe src="https://www.indiegogo.com/project/trytolisten-me-web-site-privacy/embedded/9880246" width="222px" height="445px" frameborder="0" scrolling="no"></iframe>
-            </div>
-        </div>
-		<div class="row">
     	    <div class="five columns">
         	    {{ form("login") }}
                 	<div class="center">
@@ -33,10 +25,13 @@
         			<div class="col"></div>
             	</div>
             </div>
-    	    <div class="seven columns">
+    	    <div class="six columns">
     	    	{{ translate._("helplogin") }}
     	        <h4>{{ translate._("ifnot") }} {{ link_to('signup', translate._("signuphere")) }}</h4>
     	    </div>
+    	    <div class="one columns">
+                <iframe src="https://www.indiegogo.com/project/trytolisten-me-web-site-privacy/embedded/9880246" width="222px" height="445px" frameborder="0" scrolling="no"></iframe>
+            </div>
         </div>
     </div>
 <script>
